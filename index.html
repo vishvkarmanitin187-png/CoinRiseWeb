@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinRise - Production Rewards Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Auth Container (Shown when logged out) -->
+    <div id="auth-container" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="logo-container" style="justify-content: center; margin-bottom: 24px;">
+                <div class="logo-icon"><i class="fa-solid fa-coins"></i></div>
+                <span class="logo-text" style="font-size: 24px;">CoinRise</span>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form-view">
+                <h2>Welcome Back</h2>
+                <p>Login to your verified CoinRise account</p>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <div class="form-error" id="loginError"></div>
+                    <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; margin-top: 8px;">Login</button>
+                </form>
+                <div class="auth-switch">
+                    Don't have an account? <a onclick="toggleAuthView('signup')">Sign Up</a>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signup-form-view" style="display: none;">
+                <h2>Create Account</h2>
+                <p>Join CoinRise and earn verified rewards</p>
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signupName" required placeholder="Alex Morgan">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="signupEmail" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>Referral Code (Optional)</label>
+                        <input type="text" id="signupRefCode" placeholder="e.g. COIN1234">
+                    </div>
+                    <div class="form-error" id="signupError"></div>
+                    <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; margin-top: 8px;">Sign Up & Get Bonus</button>
+                </form>
+                <div class="auth-switch">
+                    Already have an account? <a onclick="toggleAuthView('login')">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Wrapper (Shown when logged in) -->
+    <div id="app-wrapper" style="display: none;">
+        <!-- Top Header -->
+        <header class="app-header">
+            <div class="logo-container" onclick="switchSection('home')" style="cursor: pointer;">
+                <div class="logo-icon"><i class="fa-solid fa-coins"></i></div>
+                <span class="logo-text">CoinRise</span>
+            </div>
+            <div class="header-right">
+                <div class="points-badge">
+                    <i class="fa-solid fa-star gold-icon"></i>
+                    <span id="headerPoints">0</span> pts
+                </div>
+                <div class="user-avatar" id="headerAvatar" onclick="switchSection('profile')">U</div>
+            </div>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="app-container">
+
+            <!-- HOME SECTION -->
+            <section id="home-section" class="content-section active">
+                <div class="hero-card">
+                    <div class="hero-content">
+                        <span class="hero-subtitle">Secure Server Rewards Verified ✓</span>
+                        <h1 id="welcomeUserTitle">Hello, User</h1>
+                        <p>Complete eligible tasks and earn points verified strictly on the server.</p>
+                        <button class="btn-primary" onclick="switchSection('earn')">Start Earning</button>
+                    </div>
+                    <div class="hero-icon-bg"><i class="fa-solid fa-award"></i></div>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="quick-card" onclick="switchSection('earn')">
+                        <div class="qc-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;"><i class="fa-solid fa-bolt"></i></div>
+                        <span>Earn</span>
+                    </div>
+                    <div class="quick-card" onclick="switchSection('missions')">
+                        <div class="qc-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;"><i class="fa-solid fa-bullseye"></i></div>
+                        <span>Missions</span>
+                    </div>
+                    <div class="quick-card" onclick="switchSection('wallet')">
+                        <div class="qc-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;"><i class="fa-solid fa-wallet"></i></div>
+                        <span>Wallet</span>
+                    </div>
+                    <div class="quick-card" onclick="switchSection('referral')">
+                        <div class="qc-icon" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;"><i class="fa-solid fa-share-nodes"></i></div>
+                        <span>Referral</span>
+                    </div>
+                </div>
+
+                <div id="adminBanner" style="display: none; margin-bottom: 20px;">
+                    <div class="admin-banner-card" onclick="switchSection('admin')">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <div>
+                            <h4>Admin Control Panel</h4>
+                            <p>Manage users, tasks, and withdrawal requests</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h3>Available Tasks</h3>
+                    <a onclick="switchSection('earn')">View All</a>
+                </div>
+                <div class="task-list" id="homeTaskList"></div>
+            </section>
+
+            <!-- EARN SECTION -->
+            <section id="earn-section" class="content-section">
+                <div class="section-title">
+                    <h2>Earn Points</h2>
+                    <p>Verified tasks with server-side validation.</p>
+                </div>
+                <div class="task-list" id="earnTaskList"></div>
+            </section>
+
+            <!-- MISSIONS SECTION -->
+            <section id="missions-section" class="content-section">
+                <div class="section-title">
+                    <h2>Daily Missions</h2>
+                    <p>Complete daily goals and claim bonus points.</p>
+                </div>
+                <div class="mission-list" id="missionListContainer"></div>
+            </section>
+
+            <!-- WALLET SECTION -->
+            <section id="wallet-section" class="content-section">
+                <div class="wallet-balance-card">
+                    <div class="wb-top">
+                        <span>Verified Balance</span>
+                        <i class="fa-solid fa-wallet gold-icon"></i>
+                    </div>
+                    <div class="wb-amount"><span id="walletPointsNum">0</span> <span>Points</span></div>
+                    <div class="wb-value">Estimated Value: ₹<span id="walletValueNum">0.00</span></div>
+                    <button class="btn-gold" onclick="openWithdrawModal()">Request UPI Withdrawal</button>
+                </div>
+
+                <div class="section-header" style="margin-top: 24px;">
+                    <h3>Transaction Ledger</h3>
+                </div>
+                <div class="transaction-list" id="transactionListContainer"></div>
+            </section>
+
+            <!-- PROFILE SECTION -->
+            <section id="profile-section" class="content-section">
+                <div class="profile-card">
+                    <div class="profile-avatar-large" id="profileInitials">U</div>
+                    <h3 id="profileName">User</h3>
+                    <p id="profileEmail">email@domain.com</p>
+                    <div class="referral-pill">Referral Code: <span id="profileRefCode">------</span></div>
+                </div>
+                <div class="menu-list">
+                    <div class="menu-item" onclick="switchSection('wallet')">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>Wallet & Withdrawals</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="menu-item" onclick="switchSection('referral')">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Referral Program</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                    <div class="menu-item" id="adminMenuBtn" style="display: none;" onclick="switchSection('admin')">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Admin Dashboard</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+                <button class="btn-danger" onclick="logout()">Logout</button>
+            </section>
+
+            <!-- REFERRAL SECTION -->
+            <section id="referral-section" class="content-section">
+                <div class="referral-banner">
+                    <i class="fa-solid fa-share-nodes ref-icon"></i>
+                    <h2>Invite Friends & Earn</h2>
+                    <p>Get 100 points per verified referral with anti-fraud protection.</p>
+                    <div class="ref-code-box">
+                        <span id="uniqueRefCode">------</span>
+                        <button onclick="copyRefCode()"><i class="fa-solid fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <div class="section-header" style="margin-top: 24px;">
+                    <h3>Referred Friends (<span id="refCount">0</span>)</h3>
+                </div>
+                <div class="referred-list" id="referredListContainer"></div>
+            </section>
+
+            <!-- ADMIN SECTION -->
+            <section id="admin-section" class="content-section">
+                <div class="section-title">
+                    <h2>Admin Control Panel</h2>
+                    <p>Secure server-side management dashboard.</p>
+                </div>
+                <div class="admin-tabs">
+                    <button class="chip active" onclick="switchAdminTab('users')">Users</button>
+                    <button class="chip" onclick="switchAdminTab('tasks')">Tasks</button>
+                    <button class="chip" onclick="switchAdminTab('withdrawals')">Withdrawals</button>
+                </div>
+                <div id="adminUsersTab" class="admin-tab-content active"></div>
+                <div id="adminTasksTab" class="admin-tab-content" style="display: none;">
+                    <div style="background: var(--bg-surface); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                        <h4>Add New Task</h4>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <input type="text" id="newTaskTitle" placeholder="Task Title">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="newTaskDesc" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="newTaskReward" placeholder="Reward Points">
+                        </div>
+                        <button class="btn-primary" onclick="createTask()">Create Task</button>
+                    </div>
+                    <div id="adminTasksList"></div>
+                </div>
+                <div id="adminWithdrawalsTab" class="admin-tab-content" style="display: none;">
+                    <div id="adminWithdrawalsList"></div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <a class="nav-item active" onclick="switchSection('home')" id="nav-home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a class="nav-item" onclick="switchSection('earn')" id="nav-earn">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Earn</span>
+            </a>
+            <a class="nav-item" onclick="switchSection('missions')" id="nav-missions">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Missions</span>
+            </a>
+            <a class="nav-item" onclick="switchSection('wallet')" id="nav-wallet">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Wallet</span>
+            </a>
+            <a class="nav-item" onclick="switchSection('profile')" id="nav-profile">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Request UPI Withdrawal</h3>
+                <button onclick="closeModal('withdrawModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>UPI ID (e.g. name@paytm)</label>
+                    <input type="text" id="withdrawUpi" placeholder="username@upi">
+                </div>
+                <div class="form-group">
+                    <label>Points to Withdraw (Min: 500)</label>
+                    <input type="number" id="withdrawAmount" value="500">
+                </div>
+                <div class="form-error" id="withdrawError"></div>
+                <button class="btn-primary" onclick="submitWithdrawal()" style="width: 100%; padding: 12px;">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification">Action completed!</div>
+
+    <script src="app.js"></script>
+</body>
+</html>
